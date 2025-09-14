@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Frontend Quiz</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      color: #ffffffe6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      width: 600px;
+      max-width: 90%;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    h1, h2 {
+      margin-bottom: 20px;
+    }
+
+    .question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      text-align: left;
+    }
+
+    .options label {
+      display: block;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+      border: 2px solid #ffffffcc;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    .options label:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #00c3ff;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #0077b6;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .result {
+      font-size: 22px;
+      margin-top: 20px;
+    }
+
+    .answers-list {
+      text-align: left;
+      margin-top: 20px;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .answer-item {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      border: 2px solid #ffffffcc;
+    }
+
+    .correct-answer {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .wrong-answer {
+      color: #FF5252;
+      font-weight: bold;
+    }
+
+    .your-answer {
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Welcome Page -->
+    <div id="welcome">
+      <h1>Welcome to the Frontend Development Quiz</h1>
+      <button id="startBtn">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quiz" class="hidden">
+      <div class="question" id="question">Loading question...</div>
+      <div class="options" id="options"></div>
+      <button id="nextBtn">Next</button>
+    </div>
+
+    <!-- Result Page -->
+    <div id="resultPage" class="hidden">
+      <h2>Your Result</h2>
+      <div class="result" id="resultText"></div>
+      <button id="showAnswersBtn">📖 Show Correct Answers</button>
+      <button id="playAgainBtn">🔄 Play Again</button>
+    </div>
+
+    <!-- Correct Answers Page -->
+    <div id="correctAnswersPage" class="hidden">
+      <h2>All Correct Answers</h2>
+      <div class="answers-list" id="correctAnswersList"></div>
+      <button id="backToResultBtn">⬅ Back to Result</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "1. What does HTML stand for?",
+        options: [
+          "Hyper Text Markup Language",
+          "Home Tool Markup Language",
+          "Hyperlinks and Text Markup Language",
+          "Hyper Tool Multi Language"
+        ],
+        correct: 0
+      },
+      {
+        question: "2. Which property in CSS is used to change text color?",
+        options: [
+          "font-color",
+          "text-color",
+          "color",
+          "foreground-color"
+        ],
+        correct: 2
+      },
+      {
+        question: "3. Which HTML tag is used to include JavaScript code?",
+        options: [
+          "<js>",
+          "<script>",
+          "<javascript>",
+          "<code>"
+        ],
+        correct: 1
+      },
+      {
+        question: "4. How do you link a CSS file in HTML?",
+        options: [
+          "<style src='style.css'>",
+          "<css href='style.css'>",
+          "<link rel='stylesheet' href='style.css'>",
+          "<stylesheet>style.css</stylesheet>"
+        ],
+        correct: 2
+      },
+      {
+        question: "5. Which method adds an element at the end of an array?",
+        options: [
+          "add()",
+          "insert()",
+          "append()",
+          "push()"
+        ],
+        correct: 3
+      },
+      {
+        question: "6. Which HTML attribute specifies an input field must be filled out?",
+        options: [
+          "required",
+          "placeholder",
+          "validate",
+          "mandatory"
+        ],
+        correct: 0
+      },
+      {
+        question: "7. Which CSS unit is relative to the parent’s font size?",
+        options: [
+          "px",
+          "em",
+          "%",
+          "vh"
+        ],
+        correct: 1
+      },
+      {
+        question: "8. What keyword is used to declare a constant in JavaScript?",
+        options: [
+          "let",
+          "var",
+          "constant",
+          "const"
+        ],
+        correct: 3
+      },
+      {
+        question: "9. Which event occurs when a user clicks an HTML element?",
+        options: [
+          "onhover",
+          "onclick",
+          "onchange",
+          "onmouseclick"
+        ],
+        correct: 1
+      },
+      {
+        question: "10. What does DOM stand for?",
+        options: [
+          "Document Object Model",
+          "Data Object Management",
+          "Digital Ordinance Model",
+          "Document Order Method"
+        ],
+        correct: 0
+      }
+    ];
+
+    const welcomePage = document.getElementById("welcome");
+    const quizPage = document.getElementById("quiz");
+    const resultPage = document.getElementById("resultPage");
+    const correctAnswersPage = document.getElementById("correctAnswersPage");
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const resultText = document.getElementById("resultText");
+    const correctAnswersList = document.getElementById("correctAnswersList");
+
+    const nextBtn = document.getElementById("nextBtn");
+    const startBtn = document.getElementById("startBtn");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const showAnswersBtn = document.getElementById("showAnswersBtn");
+    const backToResultBtn = document.getElementById("backToResultBtn");
+
+    let currentQuestion = 0;
+    let score = 0;
+    let userAnswers = [];
+
+    function escapeHTML(str) {
+      return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    startBtn.addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      quizPage.classList.remove("hidden");
+      currentQuestion = 0;
+      score = 0;
+      userAnswers = [];
+      loadQuestion();
+    });
+
+    playAgainBtn.addEventListener("click", () => {
+      currentQuestion = 0;
+      score = 0;
+      userAnswers = [];
+      resultPage.classList.add("hidden");
+      quizPage.classList.remove("hidden");
+      loadQuestion();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("Please select an answer!");
+        return;
+      }
+
+      const answer = parseInt(selected.value);
+      userAnswers.push(answer);
+
+      if (answer === quizData[currentQuestion].correct) {
+        score++;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    showAnswersBtn.addEventListener("click", () => {
+      resultPage.classList.add("hidden");
+      correctAnswersPage.classList.remove("hidden");
+      showCorrectAnswers();
+    });
+
+    backToResultBtn.addEventListener("click", () => {
+      correctAnswersPage.classList.add("hidden");
+      resultPage.classList.remove("hidden");
+    });
+
+    function loadQuestion() {
+      const current = quizData[currentQuestion];
+      questionEl.innerHTML = escapeHTML(current.question);
+      optionsEl.innerHTML = "";
+
+      current.options.forEach((option, index) => {
+        const label = document.createElement("label");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "option";
+        input.value = index;
+
+        label.appendChild(input);
+        label.innerHTML += escapeHTML(option);
+        optionsEl.appendChild(label);
+      });
+    }
+
+    function showResult() {
+      quizPage.classList.add("hidden");
+      resultPage.classList.remove("hidden");
+
+      resultText.innerHTML = `🎉 You scored <strong>${score}</strong> out of <strong>${quizData.length}</strong>!`;
+    }
+
+    function showCorrectAnswers() {
+      correctAnswersList.innerHTML = "";
+      quizData.forEach((item, index) => {
+        const answerItem = document.createElement("div");
+        answerItem.classList.add("answer-item");
+
+        const questionText = document.createElement("div");
+        questionText.innerHTML = escapeHTML(item.question);
+        questionText.style.fontWeight = "bold";
+
+        const correctAnswer = document.createElement("div");
+        correctAnswer.innerHTML = `✅ Correct Answer: <span class="correct-answer">${escapeHTML(item.options[item.correct])}</span>`;
+
+        const userAnswerIndex = userAnswers[index];
+        const userAnswerText = item.options[userAnswerIndex];
+        const isCorrect = userAnswerIndex === item.correct;
+
+        const userAnswer = document.createElement("div");
+        userAnswer.classList.add("your-answer");
+        userAnswer.innerHTML = `📝 Your Answer: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${escapeHTML(userAnswerText)}</span>`;
+
+        answerItem.appendChild(questionText);
+        answerItem.appendChild(correctAnswer);
+        answerItem.appendChild(userAnswer);
+
+        correctAnswersList.appendChild(answerItem);
+      });
+    }
+  </script>
+</body>
+</html>
