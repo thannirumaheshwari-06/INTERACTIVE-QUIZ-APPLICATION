@@ -41,3 +41,5 @@ In summary, the Frontend Development Quiz Application is a well-rounded, standal
 #OUTPUT
 
 <img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/63f02ff0-f0bd-4225-a737-d36336030434" />
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/a9c440ea-00e6-4882-9ba2-acc35473fa3b" />
