@@ -38,3 +38,6 @@ It is built using only client-side technologies, making it easy to deploy on pla
 
 In summary, the Frontend Development Quiz Application is a well-rounded, standalone web app that demonstrates proficiency in core web technologies. It not only provides an interactive way to assess knowledge but also stands as a testament to clean code structure, usability, and responsive design. Whether for learning, teaching, or showcasing development abilities, this project serves as a practical and polished example of frontend web development.
 
+#OUTPUT
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/63f02ff0-f0bd-4225-a737-d36336030434" />
